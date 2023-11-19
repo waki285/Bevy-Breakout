@@ -38,4 +38,4 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           projectName: bevy-breakout
           directory: ./dist
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          gitHubToken: ${{ secrets.GH_TOKEN }}
