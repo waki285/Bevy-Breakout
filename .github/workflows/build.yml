@@ -30,8 +30,8 @@ jobs:
       - run: cargo install wasm-bindgen-cli
       - run: cargo install wasm-snip
       - run: cargo build --target ${{ env.rust-target }} --release
-      - run: wasm-snip -o ./target/wasm32-unknown-unknown/bevy-breakout.wasm ./target/wasm32-unknown-unknown/release/bevy-breakout.wasm
-      - run: wasm-bindgen --target web --out-dir ./dist/ --no-typescript target/wasm32-unknown-unknown/release/bevy-breakout.wasm
+      - run: wasm-snip -o ./target/wasm32-unknown-unknown/release/bevy-breakout-d.wasm ./target/wasm32-unknown-unknown/release/bevy-breakout.wasm
+      - run: wasm-bindgen --target web --out-dir ./dist/ --no-typescript target/wasm32-unknown-unknown/release/bevy-breakout-d.wasm
       - name: publish to cloudflare pages
         uses: cloudflare/pages-action@1
         with:
