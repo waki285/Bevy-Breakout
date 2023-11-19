@@ -1,0 +1,42 @@
+name: delivery to cloudflare pages
+
+on: push
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    env:
+      rust-target: wasm32-unknown-unknown
+      node-version: 18.x
+    steps:
+      - uses: actions/checkout@v3
+      - name: rust target ${{ env.rust-target }}
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ env.rust-target }}
+          override: true
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: ${{ runner.os }}
+          workspaces: |
+            wasmple
+      - run: rustup target add wasm32-unknown-unknown
+      - run: cargo install wasm-bindgen-cli
+        continue-on-error: false
+      - run: cargo build --target wasm32-unknown-unknown --release
+      - run: wasm-bindgen --target web --out-dir ./dist/ --no-typescript target/wasm32-unknown-unknown/release/bevy-breakout.wasm
+      - name: publish to cloudflare pages
+        uses: cloudflare/pages-action@1
+        with:
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          projectName: bevy-breakout
+          directory: ./dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
