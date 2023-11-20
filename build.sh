@@ -7,4 +7,6 @@ cargo build --release --target wasm32-unknown-unknown
 cargo install wasm-bindgen-cli
 wasm-bindgen --target web --out-dir ./dist/ --no-typescript target/wasm32-unknown-unknown/release/bevy-breakout.wasm
 cp static/index.html dist/index.html
+mkdir dist/assets
+cp -r assets/* dist/assets/
 echo "Build complete"
